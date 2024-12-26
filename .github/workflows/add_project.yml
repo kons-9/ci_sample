@@ -15,9 +15,8 @@ jobs:
     env:
       # ISSUE_NUM: ${{ github.event.issue.number }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # GH_TOKEN: ${{ secrets.FIRMWARE_TOKEN_REPO }}
       ISSUE_NUM: 1
-      PROJECT_NUM: 1
+      PROJECT_NUM: 3
       PROJECT_OWNER: "kons-9"
       REPONAME: "ci_sample"
       ITERATION_FIELD_NAME: "TwoWeeks"
