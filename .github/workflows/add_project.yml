@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: add project
         run: |
+          PROJECT_ID=$(gh project view ${{ env.PROJECT_NUM }} --owner ${{ env.PROJECT_OWNER }} --format json --jq '.id' | sed -s "s/\n//")
+          echo $PROJECT_ID
           gh issue edit ${{ env.ISSUE_NUM }} --add-project ${{ env.PROJECT_NAME }} -R "${{ env.PROJECT_OWNER }}/${{ env.REPONAME }}"
       - name: set current quarter
         run: |
