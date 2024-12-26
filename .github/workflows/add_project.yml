@@ -25,15 +25,18 @@ jobs:
     steps:
       - name: add project
         run: |
-          PROJECT_ID=$(gh project view ${{ env.PROJECT_NUM }} --owner ${{ env.PROJECT_OWNER }} --format json --jq '.id' | sed -s "s/\n//")
-          echo $PROJECT_ID
           gh issue edit ${{ env.ISSUE_NUM }} --add-project ${{ env.PROJECT_NAME }} -R "${{ env.PROJECT_OWNER }}/${{ env.REPONAME }}"
       - name: set current quarter
         run: |
           PROJECT_ID=$(gh project view ${{ env.PROJECT_NUM }} --owner ${{ env.PROJECT_OWNER }} --format json --jq '.id' | sed -s "s/\n//")
+          echo $PROJECT_ID
           ITERATION_ID=$(gh api graphql --field project_id=$PROJECT_ID -f query='query($project_id: ID!){ node(id: $project_id) { ... on ProjectV2 { field(name: "${{ env.ITERATION_FIELD_NAME }}") { ... on ProjectV2IterationField { configuration { iterations { id } } } } } } }' --jq '.data.node.field.configuration.iterations[0].id')
+          echo $ITERATION_ID
           ISSUE_ID=$(gh issue view ${{ env.ISSUE_NUM }} --json id --jq '.id' -R "${{ env.PROJECT_OWNER }}/${{ env.REPONAME }}") 
+          echo $ISSUE_ID
           ITEM_PROJECT_ID=$(gh project view ${{ env.PROJECT_NUM }} --owner ${{ env.PROJECT_OWNER }} --format json --jq '.id' | sed -s "s/\n//")
+          echo $ITEM_PROJECT_ID
           FIELD_ID=$(gh project field-list ${{ env.PROJECT_NUM }} --owner ${{ env.PROJECT_OWNER }} --format json --jq ".fields[] | select(.name == \"${{ env.ITERATION_FIELD_NAME }}\").id")
+          echo $FIELD_ID
           gh project item-edit --id $ITEM_PROJECT_ID --iteration-id $ITERATION_ID --project-id $PROJECT_ID --field-id $FIELD_ID
 
