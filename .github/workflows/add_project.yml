@@ -34,7 +34,7 @@ jobs:
           echo $ITERATION_ID
           ISSUE_ID=$(gh issue view ${{ env.ISSUE_NUM }} --json id --jq '.id' -R "${{ env.PROJECT_OWNER }}/${{ env.REPONAME }}") 
           echo $ISSUE_ID
-          ITEM_PROJECT_ID=$(gh project view ${{ env.PROJECT_NUM }} --owner ${{ env.PROJECT_OWNER }} --format json --jq '.id' | sed -s "s/\n//")
+          ITEM_PROJECT_ID="$( gh api graphql -f query='mutation($project:ID!,$local_id:ID!){addProjectV2ItemById(input:{projectId:$project,contentId:$local_id}){item{id}}}' -f project=$PROJECT_ID -f local_id=$ISSUE_ID --jq '.data.addProjectV2ItemById.item.id')"
           echo $ITEM_PROJECT_ID
           FIELD_ID=$(gh project field-list ${{ env.PROJECT_NUM }} --owner ${{ env.PROJECT_OWNER }} --format json --jq ".fields[] | select(.name == \"${{ env.ITERATION_FIELD_NAME }}\").id")
           echo $FIELD_ID
