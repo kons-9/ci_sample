@@ -13,10 +13,10 @@ jobs:
       issues: write
     runs-on: ubuntu-latest
     env:
-      # ISSUE_NUM: ${{ github.event.issue.number }}
       # GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GH_TOKEN: ${{ secrets.PAT }}
-      ISSUE_NUM: 1
+      # ISSUE_NUM: 1
+      ISSUE_NUM: ${{ github.event.issue.number }}
       PROJECT_NUM: 3
       PROJECT_OWNER: "kons-9"
       REPONAME: "ci_sample"
